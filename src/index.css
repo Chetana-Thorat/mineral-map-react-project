@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ✅ Enable smooth scroll for internal anchors */
+html {
+  scroll-behavior: smooth;
+}

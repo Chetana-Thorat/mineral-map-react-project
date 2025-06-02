@@ -1,0 +1,33 @@
+.projects-page {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .mineral-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mineral-buttons button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .project-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  
+  .project-card {
+    background: #f8f8f8;
+    padding: 1rem;
+    border-left: 5px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  

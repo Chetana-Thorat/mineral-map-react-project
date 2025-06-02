@@ -1,0 +1,500 @@
+.homepage {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .hero {
+    background: url('/public/images/mining.jpg') center center / cover no-repeat;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 0 1.5rem;
+    margin-top: 0; /* reset if previously negative */
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.55); /* softened fade */
+    z-index: 1;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 2rem;
+    margin-top: -150px; /* 👈 LIFTS content slightly higher */
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    max-width: 650px;
+    margin: 0 auto 2rem;
+  }
+  
+  .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .hero-buttons button {
+    background-color: #ffc107;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    color: #003366;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .hero-buttons button:hover {
+    background-color: #e6b100;
+  }
+  
+  
+  .benefits, .trust, .overview, .form, .faq {
+    padding: 3rem 2rem;
+    text-align: center;
+    background: #f9f9f9;
+  }
+  
+  .cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  
+  .card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    width: 250px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .trust-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 1.5rem auto;
+    flex-wrap: wrap;
+  }
+  
+  .trust-logos img {
+    height: 60px;
+    object-fit: contain;
+  }
+  
+  .overview ul {
+    list-style: none;
+    padding: 0;
+    font-size: 1.1rem;
+    margin: 1rem auto;
+  }
+  
+  .download-btn {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .form form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .form input, .form textarea {
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .form button {
+    background: #28a745;
+    color: white;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .faq-item {
+    max-width: 700px;
+    margin: 1rem auto;
+    text-align: left;
+  }
+  
+  .footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-links p {
+    margin: 0.25rem 0;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    margin-top: 2rem;
+    border-radius: 12px;
+  }
+  
+  .showcase {
+    padding: 3rem 2rem;
+    background: #f4f8fc;
+    text-align: center;
+  }
+  
+  .showcase h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .gallery img {
+    width: 250px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .card:hover {
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  .gallery img:hover,
+  .trust-logos img:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+  }  
+  
+  .map-preview-horizontal {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/public/images/map01.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 3rem 1.5rem;
+    position: relative;
+    border-radius: 0;
+  }
+  
+  
+  .map-preview-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .map-preview-text {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .map-preview-text h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  .map-preview-text p {
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 1.5rem;
+  }
+  
+  .map-preview-map {
+    flex: 2;
+    min-width: 400px;
+    max-width: 900px;
+    height: 420px; /* <- updated */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+  }
+
+
+  .map-button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+  
+  .map-button:hover {
+    background-color: #0056b3;
+  }
+    
+
+  .leaflet-control-zoom {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .leaflet-control-zoom a {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s;
+  }
+  
+  .leaflet-control-zoom a:hover {
+    background-color: #e6e6e6;
+  }
+
+  .about-section {
+    position: relative;
+    background-image: url('/public/images/mineral02.jpg'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 6rem 1.5rem;
+    color: white;
+    text-align: center;
+    min-height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
+    z-index: 1;
+  }
+  
+  .about-container {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .about-container h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+  }
+  
+  .about-container p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #f0f0f0;
+  }
+  
+  .about-logo {
+    width: 120px;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 8px;
+  }
+  
+
+  .call-to-action {
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+                url('/public/images/mineral03.jpg') center center / cover no-repeat;
+    padding: 5rem 2rem;
+    text-align: center;
+    color: #222;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .cta-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .call-to-action blockquote {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-buttons button {
+    background-color: #ffc107;
+    color: #003366;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .cta-buttons button:hover {
+    background-color: #e0a800;
+  }
+  
+  .glossary-section {
+    position: relative;
+    padding: 6rem 2rem;
+    text-align: center;
+    background-image: url('/public/images/mineral01.jpg'); /* Replace with your actual image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    z-index: 1;
+    justify-content: center;
+  }
+  
+  .glossary-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* dark overlay */
+    z-index: -1;
+  }
+  
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .glossary-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    text-align: left;
+  }
+  
+  .glossary-card h4 {
+    color: #003366;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .glossary-card p {
+    font-size: 0.95rem;
+    color: #444;
+  }
+  
+  .site-footer {
+    background-color: #003366;
+    color: #f1f1f1;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  
+  .footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .footer-links {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-links a {
+    color: #ffc107;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
+  .footer-support {
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: #ccc;
+  }
+  .map-preview-img {
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  .mini-div-icon {
+    background: transparent;
+    border: none;
+  }
