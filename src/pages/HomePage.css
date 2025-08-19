@@ -3,7 +3,7 @@
   }
   
   .hero {
-    background: url('/public/images/mining.jpg') center center / cover no-repeat;
+    background: url('/public/images/website_image_02.jpeg') center center / cover no-repeat;
     position: relative;
     min-height: 100vh;
     display: flex;
@@ -32,13 +32,13 @@
   }
   
   .hero h1 {
-    font-size: 3rem;
+    font-size: 2.9rem;
     margin-bottom: 1rem;
     font-weight: bold;
   }
   
   .hero p {
-    font-size: 1.2rem;
+    font-size: 1.7rem;
     max-width: 650px;
     margin: 0 auto 2rem;
   }
@@ -54,7 +54,7 @@
     background-color: #ffc107;
     border: none;
     padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     border-radius: 5px;
     color: #003366;
     font-weight: bold;
@@ -67,6 +67,13 @@
   }
   
   
+
+
+
+
+
+
+
   .benefits, .trust, .overview, .form, .faq {
     padding: 3rem 2rem;
     text-align: center;
@@ -215,12 +222,22 @@
     transition: 0.3s ease-in-out;
   }  
   
+
+
+
+
+
+
+
+
+
+
   .map-preview-horizontal {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/public/images/map01.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/public/images/map_03.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    padding: 3rem 1.5rem;
+    padding: 8rem 2rem;
     position: relative;
     border-radius: 0;
   }
@@ -231,25 +248,29 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    max-width: 1100px;
+    max-width: 1200px;          /* Optional: wider layout */
     margin: 0 auto;
-    gap: 2rem;
+    gap: 6rem;                  /* ✅ Increase spacing between text & image */
     flex-wrap: wrap;
+    padding-left: 6rem;         /* ✅ Shifts text to the left */
+    padding-right: 6rem;
   }
+  
   
   .map-preview-text {
     flex: 1;
-    min-width: 300px;
+    min-width: 350px;
+    text-align: left;           /* ✅ Aligns all text to the left */
   }
   
   .map-preview-text h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: white;
     margin-bottom: 1rem;
   }
   
   .map-preview-text p {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: white;
     margin-bottom: 1.5rem;
   }
@@ -258,19 +279,33 @@
     flex: 2;
     min-width: 400px;
     max-width: 900px;
-    height: 420px; /* <- updated */
+    height: 500px;
     border-radius: 20px;
     overflow: hidden;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch; /* updated from center */
+    justify-content: stretch; /* updated from center */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #ddd;
+    border: none; /* remove 1px border */
   }
-
+  
+  .static-map-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ensures image fills and crops cleanly */
+    border-radius: 20px; /* match parent container */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: none; /* remove default border */
+    display: block;
+  }
 
   .map-button {
     background-color: #007bff;
     color: white;
     padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     border: none;
     border-radius: 6px;
     font-weight: 600;
@@ -280,8 +315,13 @@
   .map-button:hover {
     background-color: #0056b3;
   }
-    
 
+
+
+
+
+
+  
   .leaflet-control-zoom {
     border-radius: 8px;
     overflow: hidden;
@@ -298,58 +338,198 @@
     background-color: #e6e6e6;
   }
 
+
+
+
+
+
+
+
+
   .about-section {
-    position: relative;
-    background-image: url('/public/images/mineral02.jpg'); /* Replace with your image */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('/public/images/website_image_04.jpeg') no-repeat center center;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 6rem 1.5rem;
     color: white;
-    text-align: center;
-    min-height: 450px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 4rem 2rem;
   }
   
-  .about-section::before {
+  .about-title {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    max-width: 1000px;
+    gap: 2rem;
+    margin: 0 auto;
+    justify-items: center;
+  }
+  
+  .about-card {
+    background-color: #010322; /* Solid blue */
+    padding: 2rem;
+    border-radius: 12px;
+    border: none; /* Optional: remove border */
+    backdrop-filter: none; /* Remove blur */
+    transition: all 0.3s ease;
+  }
+  
+  .about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+  }
+  
+  .about-card h3 {
+    color: #ffe082;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .about-card p {
+    color: #f1f1f1;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .about-card a {
+    color: #90caf9;
+  }
+
+  .about-dataset-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.5rem 2rem 2.5rem 2rem;
+  }
+  
+  .about-dataset-btn {
+    background-color: #ffc107;
+    color: #040a57;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+  
+  .about-dataset-btn:hover {
+    transform: translateY(-3px);
+  }
+
+
+
+
+
+
+  
+  .about-people-section {
+    position: relative;
+    padding: 4rem 2rem 6rem 2rem;
+    text-align: center;
+    color: #010322;
+    background-color: #010322; /* 🌌 Sapphire Blue */
+    background-image: none;    /* 🔥 Removes background image */
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .about-people-section::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* dark overlay */
-    z-index: 1;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+  }
+
+  
+  .about-people-title {
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 2.5rem;
+    color: rgba(245, 238, 238, 0.856);
+    margin-bottom: 3rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   }
   
-  .about-container {
-    position: relative;
-    z-index: 2;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 1rem;
+  .people-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: nowrap;
+    margin-bottom: 2rem;
+    flex-shrink: 0;
   }
   
-  .about-container h2 {
-    font-size: 2.2rem;
+  .center-row {
+    justify-content: center;
+  }
+  
+  .person-card {
+    background-color: rgb(245, 238, 238); /* Soft dark overlay */
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 240px;
+    transition: transform 0.2s ease;
+  }
+  
+  .person-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .person-photo {
+    width: 180px;       /* Increased from 120px */
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
     margin-bottom: 1rem;
-    color: #ffffff;
+    border: 4px solid #e3e3e3;
+  }
+
+  .person-photo-container {
+    position: relative;
+    display: inline-block;
   }
   
-  .about-container p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #f0f0f0;
+  .person-arrow-wrapper {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: #ffcc00;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #000;
   }
   
-  .about-logo {
-    width: 120px;
-    height: auto;
-    margin: 1rem 0;
-    border-radius: 8px;
+  .arrow-tooltip {
+    position: absolute;
+    bottom: 120%;
+    right: 0;
+    background: #000;
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
+  
+  .person-arrow-wrapper:hover .arrow-tooltip {
+    opacity: 1;
+  }
+
+  
+
+
   
 
   .call-to-action {
@@ -401,7 +581,7 @@
     position: relative;
     padding: 6rem 2rem;
     text-align: center;
-    background-image: url('/public/images/mineral01.jpg'); /* Replace with your actual image path */
+    background-image: url('/public/images/website_image_03.jpg'); /* Replace with your actual image path */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -421,6 +601,14 @@
     z-index: -1;
   }
   
+  .glossary-section h2 {
+    font-size: 2.5rem;        /* Increase font size */
+    margin-bottom: 2rem;
+    margin-top: -1.5rem;      /* Shift text upward */
+    font-weight: 700;
+    color: white;
+  }
+
   .glossary-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -440,61 +628,126 @@
   }
   
   .glossary-card h4 {
-    color: #003366;
-    font-size: 1.2rem;
+    color: #010322;
+    font-size: 1.5rem;
     margin-bottom: 0.5rem;
   }
   
   .glossary-card p {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #444;
   }
   
-  .site-footer {
-    background-color: #003366;
-    color: #f1f1f1;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    font-size: 0.95rem;
-  }
-  
-  .footer-content {
+  .custom-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 2rem auto 0;
   }
   
-  .footer-links {
-    margin: 1rem 0;
+  .glossary-card.empty {
+    visibility: hidden;
+  }
+
+  .glossary-button-wrapper {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-right: 2rem;
   }
   
-  .footer-links a {
-    color: #ffc107;
+  .glossary-btn {
+    background-color: #ffc107;
+    color: #040a57;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 500;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: background 0.3s ease, transform 0.2s ease;
   }
   
-  .footer-links a:hover {
-    text-decoration: underline;
+  .glossary-btn:hover {
+    background-color: #ffc107;
+    transform: translateY(-2px);
   }
   
-  .footer-support {
-    margin-top: 0.5rem;
-    font-style: italic;
-    color: #ccc;
-  }
-  .map-preview-img {
-    width: 100%;
-    height: auto;
-    max-height: 420px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  .mini-div-icon {
-    background: transparent;
-    border: none;
-  }
+
+  /* Footer Styling */
+/* Footer Styling */
+.site-footer {
+  background-color: #990000; /* IU crimson red */
+  color: white;
+  padding: 3rem 2rem 1rem;
+  font-size: 0.95rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-grid.compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: #ffd500; /* IU golden accent */
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.footer-section p,
+.footer-section li {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+  color: #ffd500;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 2rem;
+}
+
+/* Floating Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #ffd500;
+  color: #990000;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.back-to-top:hover {
+  background-color: #ffcc00;
+  transform: translateY(-3px);
+}

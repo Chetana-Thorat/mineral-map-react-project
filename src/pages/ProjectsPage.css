@@ -1,33 +1,161 @@
-.projects-page {
-    padding: 2rem;
-    font-family: Arial, sans-serif;
+.projects-split-page {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Left Panel */
+.projects-left-panel {
+  background-color: #990000;
+  color: white;
+  padding: 3rem 2rem;
+  flex: 1;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.projects-left-panel h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.projects-subtext {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #f2f2f2;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem 1.2rem;
+  border-left: 4px solid #ffcc00;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+
+.projects-search-input {
+  width: 95%; /* Reduced from 100% */
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.clear-btn-right {
+  margin-top: 1rem;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #990000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 95%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.clear-btn-right:hover {
+  background-color: #e0e0e0;
+}
+
+/* Right Panel */
+.projects-right-panel {
+  flex: 2;
+  padding: 3rem 2rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Vertical Red Boxes for Minerals */
+.vertical-mineral-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.vertical-mineral-box {
+  background-color: #990000;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1.2rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 95%;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.vertical-mineral-box:hover,
+.vertical-mineral-box.active {
+  background-color: #b30000;
+}
+
+/* Project Results Section */
+.project-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #990000;
+}
+
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: white;
+  border-left: 5px solid #ffcc00;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+.project-card h3 {
+  font-size: 1.1rem;
+  color: #990000;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.project-card p {
+  font-size: 0.95rem;
+  margin: 0.25rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .projects-split-page {
+    flex-direction: column;
   }
-  
-  .mineral-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 1.5rem;
+
+  .projects-left-panel, .projects-right-panel {
+    max-width: 100%;
   }
-  
-  .mineral-buttons button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+
+  .projects-left-panel {
+    text-align: center;
   }
-  
-  .project-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+
+  .vertical-mineral-box {
+    font-size: 1rem;
   }
-  
-  .project-card {
-    background: #f8f8f8;
-    padding: 1rem;
-    border-left: 5px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-  
+}

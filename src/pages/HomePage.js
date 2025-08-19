@@ -8,6 +8,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const customIcon = new L.Icon({
   iconUrl: markerIcon,
@@ -19,13 +21,29 @@ const customIcon = new L.Icon({
 });
 
 const glossary = [
-  { term: "Lithium", definition: "A critical mineral used in electric vehicle batteries and energy storage systems." },
-  { term: "Project Status", definition: "Describes the development phase: Exploration, Development, Active, etc." },
-  { term: "Type of Land", definition: "Indicates whether the mineral project is on public, private, or mixed land." },
-  { term: "Exploration Phase", definition: "The initial stage of a mining project, involving surveys and assessments." },
-  { term: "Critical Minerals", definition: "Minerals essential to the economy and national security, with vulnerable supply chains." },
-  { term: "Rare Earth Elements", definition: "A group of 17 chemically similar elements used in high-tech devices, defense, and clean energy." } 
+  { term: "Project Description", definition: "A critical mineral used in electric vehicle batteries and energy storage systems." },
+  { term: "Location Information", definition: "Describes the development phase: Exploration, Development, Active, etc." },
+  { term: "Developer Description", definition: "Indicates whether the mineral project is on public, private, or mixed land." },
+  { term: "Development Plans", definition: "The initial stage of a mining project, involving surveys and assessments." },
+  { term: "Financial Support", definition: "Minerals essential to the economy and national security, with vulnerable supply chains." },
+  { term: "Land Ownership", definition: "A group of 17 chemically similar elements used in high-tech devices, defense, and clean energy." },
+  { term: "Litigation Information", definition: "A group of 17 chemically similar elements used in high-tech devices, defense, and clean energy." } 
 ];
+
+const teamMembers = [
+  { name: "John D. Graham", role: "Principal Investigator, Professor", image: "/images/john.jpg", link: "https://oneill.indiana.edu/faculty-research/directory/profiles/faculty/full-time/graham-john.html" },
+  { name: "John A. Rupp ", role: "Professor", image: "/images/rupp.jpg", link: "https://oneill.indiana.edu/faculty-research/directory/profiles/faculty/full-time/rupp-john.html" },
+  { name: "Kelly Anderson", role: "Research Assistant", image: "/images/kelly.jpg", link: "https://www.linkedin.com/in/kellylynnanderson/" },
+  { name: "Shannon Halinski", role: "Research Assistant", image: "/images/shannon.jpg", link: "https://www.linkedin.com/in/shannon-halinski/" },
+  { name: "Chetana Thorat", role: "Research Assistant", image: "/images/Chetana02.jpeg", link: "https://www.linkedin.com/in/chetana-thorat/" },
+  { name: "David Young", role: "Research Assistant", image: "/images/david.jpg", link: "https://www.linkedin.com/in/david-young-ii-863355311/" },
+  { name: "Jax Fisher", role: "Research Assistant", image: "/images/Jax.jpg", link: "https://www.linkedin.com/in/jax-fisher/" }
+];
+
+const topRow = teamMembers.slice(0, 4);
+const bottomRow = teamMembers.slice(4);
+
+
 
 function HomePage() {
   const navigate = useNavigate();
@@ -38,11 +56,11 @@ function HomePage() {
     <div className="homepage">
       <header className="hero" data-aos="fade-down">
         <div className="hero-content">
-          <h1>Unlock Critical Mineral Insights Across the U.S.</h1>
-          <p>Explore data-driven insights on strategic mineral resources.</p>
+          <h1>Database of EV Critical Material Projects</h1>
+          <p>Unlock Critical Material Insights Across the U.S.</p>
           <div className="hero-buttons">
             <button onClick={() => navigate('/map')}>Explore Interactive Map</button>
-            <button onClick={() => navigate('/search')}>Search Projects</button>
+            <button onClick={() => navigate('/projects')}>Search Projects</button>
           </div>
         </div>
       </header>
@@ -53,8 +71,8 @@ function HomePage() {
           <div className="map-preview-text">
             <h2>Mini Map Preview</h2>
             <p>
-              Discover and interact with a visual snapshot of strategic mineral projects
-              across the U.S. Click below to explore the full interactive map with over 200+ projects.
+              Discover and interact with a visual snapshot of critical materials projects
+              across the U.S. Click below to explore the full interactive map with over 100+ projects.
             </p>
             <button className="map-button" onClick={() => navigate('/map')}>
               Explore Full Map
@@ -62,63 +80,202 @@ function HomePage() {
           </div>
 
           <div className="map-preview-map">
-          <MapContainer
-            center={[39.5, -98.35]}
-            zoom={4}
-            scrollWheelZoom={true}
-            dragging={true}
-            doubleClickZoom={true}
-            zoomControl={true}
-            attributionControl={false}
-            style={{ height: '420px', width: '100%', borderRadius: '12px' }}
-          >
-              <TileLayer
-                attribution='&copy; OpenStreetMap contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-            </MapContainer>
+            <arcgis-embedded-map
+              style={{ height: '100%', width: '100%', borderRadius: '20px', overflow: 'hidden' }}
+              item-id="a2f5f33bf0fe4d73b54ea3cc8fbd762b"
+              portal-url="https://iu.maps.arcgis.com"
+              theme="light"
+            ></arcgis-embedded-map>
           </div>
+
         </div>
       </section>
 
 
       {/* About Section */}
-      <section id="about" className="about-section" data-aos="fade-up">
-        <div className="about-container">
-          <h2>About the Project</h2>
-          <p>
-            DEV-CaMP is an initiative dedicated to cataloging and visualizing U.S. mineral projects.
-            It supports researchers and policymakers with data-driven insights into current projects nationwide.
-          </p>
+      <section className="about-section" id="about">
+        <h2 className="about-title">About DEV-CaMP</h2>
+        <div className="about-grid">
+          <div className="about-card">
+            <h3>What Is DEV-CaMP?</h3>
+            <p>
+              The <strong>Database of EV Critical Material Projects (DEV-CaMP)</strong> is a growing resource that tracks U.S. mining and associated processing projects for key materials used in electric vehicles, including lithium, copper, cobalt, neodymium, nickel, graphite, and manganese.
+            </p>
+          </div>
+
+          <div className="about-card">
+            <h3>Who Built It?</h3>
+            <p>
+              Our team — a working group established in <strong>2021</strong> at <strong>Indiana University’s Paul H. O’Neill School of Public and Environmental Affairs</strong> — brings together faculty, graduate students, and undergraduate researchers with an interest in the policy, permitting, funding, and development challenges facing the U.S. critical materials sector.
+            </p>
+          </div>
+
+          <div className="about-card">
+            <h3>Current Data & Updates</h3>
+            <p>
+              This release marks the <strong>first time the database has been made publicly available</strong>. The information reflects data collected through <strong>January 2025</strong>, and we plan to update the site on an annual basis as new projects emerge and existing sites progress.
+            </p>
+          </div>
+
+          <div className="about-card">
+            <h3>What’s Next?</h3>
+            <p>
+              Additional data fields will be added over time as new information is collected and fully reviewed. For questions or suggestions, please contact our principal investigator, John D. Graham, at <a href="mailto:grahamjd@iu.edu">grahamjd@iu.edu</a>.
+            </p>
+          </div>
+        </div>
+        <div className="about-dataset-btn-wrapper">
+          <a
+            href="/DevCamp_new.xlsx"
+            download="DEV-CaMP-Dataset.xlsx"
+            className="about-dataset-btn"
+          >
+            Download Dataset →
+          </a>
         </div>
       </section>
 
-      {/* Glossary Section */}
-      <section id="glossary" className="glossary-section" data-aos="fade-up">
-        <h2>Glossary</h2>
-        <div className="glossary-grid">
-          {glossary.map((item, index) => (
-            <div key={index} className="glossary-card">
-              <h4>{item.term}</h4>
-              <p>{item.definition}</p>
+
+
+      <section className="about-people-section" id="team">
+        <h2 className="about-people-title">Meet the Team</h2>
+
+        <div className="people-row">
+          {teamMembers.slice(0, 4).map((person, index) => (
+            <div key={index} className="person-card">
+              <div className="person-photo-container">
+                <img src={person.image} alt={person.name} className="person-photo" />
+                <a href={person.link} target="_blank" rel="noreferrer" className="person-arrow-wrapper">
+                  <span className="arrow-icon">↗</span>
+                  <div className="arrow-tooltip">Click to view profile</div>
+                </a>
+              </div>
+              <h3>{person.name}</h3>
+              <p>{person.role}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="people-row center-row">
+          {teamMembers.slice(4).map((person, index) => (
+            <div key={index + 4} className="person-card">
+              <div className="person-photo-container">
+                <img src={person.image} alt={person.name} className="person-photo" />
+                <a href={person.link} target="_blank" rel="noreferrer" className="person-arrow-wrapper">
+                  <span className="arrow-icon">↗</span>
+                  <div className="arrow-tooltip">Click to view profile</div>
+                </a>
+              </div>
+              <h3>{person.name}</h3>
+              <p>{person.role}</p>
             </div>
           ))}
         </div>
       </section>
 
+
+
+      {/* Glossary Section */}
+      <section id="glossary" className="glossary-section" data-aos="fade-up">
+        <h2>User Guidance: Fields in DEV-CaMP</h2>
+
+        <div className="glossary-grid custom-layout">
+          {/* Row 1 */}
+          <div className="glossary-card">
+            <h4>Project Description</h4>
+            <p>Basic information about the project.</p>
+          </div>
+          <div className="glossary-card">
+            <h4>Location Information</h4>
+            <p>Includes state, county, and distance to nearest population center.</p>
+          </div>
+          <div className="glossary-card">
+            <h4>Developer Description</h4>
+            <p>Developer information including lead developer and commercial partnerships.</p>
+          </div>
+
+          {/* Row 2 */}
+          <div className="glossary-card">
+            <h4>Development Plans</h4>
+            <p>Includes information regarding plans for processing and the level of production.</p>
+          </div>
+          <div className="glossary-card">
+            <h4>Financial Support</h4>
+            <p>Supply agreements and federal or state grants/loans.</p>
+          </div>
+          <div className="glossary-card">
+            <h4>Land Ownership</h4>
+            <p>Public and private land information.</p>
+          </div>
+
+          {/* Centered final row */}
+          <div className="glossary-card empty"></div>
+          <div className="glossary-card">
+            <h4>Litigation Information</h4>
+            <p>Includes information about lawsuits the project may be facing.</p>
+          </div>
+          <div className="glossary-card empty"></div>
+        </div>
+        <div className="glossary-button-wrapper">
+        <HashLink smooth to="/user-guide#user-guide-top" className="glossary-btn">
+          View Full User Guide →
+        </HashLink>
+        </div>
+        
+      </section>
+
+
       {/* Footer / Contact Section */}
       <footer id="contact" className="site-footer" data-aos="fade-up">
-        <div className="footer-content">
-          <p>© 2025 <strong>Chetana Thorat</strong> | Indiana University Bloomington</p>
-          <div className="footer-links">
-            <a href="https://www.linkedin.com/in/chetanathorat" target="_blank" rel="noreferrer">LinkedIn</a>
-            <a href="https://github.com/chetanathorat" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+        <div className="footer-grid compact">
+
+          {/* Brand Identity */}
+          <div className="footer-section brand">
+            <h3>DEV-CaMP</h3>
+            <p>Indiana University Bloomington</p>
           </div>
-          <p className="footer-support">Supported by DEV-CaMP</p>
+
+          {/* Quick Navigation */}
+          <div className="footer-section links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/map">Map</a></li>
+              <li><a href="/projects">Projects</a></li>
+              <li><a href="/user-guide">User Guide</a></li>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="footer-section contact">
+            <h4>Contact</h4>
+            <ul>
+              <li>Prof. John D. Graham — grahamjd@iu.edu</li>
+              <li>
+                <a
+                  href="https://oneill.indiana.edu/faculty-research/directory/profiles/faculty/full-time/graham-john.html"
+                  target="_blank" rel="noreferrer"
+                >
+                  John D. Graham Profile
+                </a>
+              </li>
+              
+            </ul>
+          </div>
         </div>
+
+        {/* Bottom Center Text */}
+        <div className="footer-bottom">
+          <p>© 2025 Indiana University Bloomington</p>
+          <p>Supported by the DEV-CaMP Research Group</p>
+        </div>
+
+        {/* Floating Back to Top Button */}
+        <a href="#top" className="back-to-top">↑ Back to Top</a>
       </footer>
+
+
+
     </div>
   );
 }

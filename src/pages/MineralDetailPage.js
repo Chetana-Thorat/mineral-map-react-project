@@ -5,45 +5,103 @@ import './MineralDetailPage.css';
 
 function MineralDetailPage() {
   const { id } = useParams();
-  const [mineral, setMineral] = useState(null);
-  const [noteMap, setNoteMap] = useState({});
-  const [searchTerm, setSearchTerm] = useState('');  // State for search term
   const navigate = useNavigate();
   const notesRef = useRef(null);
 
+  const [mineral, setMineral] = useState(null);
+  const [noteMap, setNoteMap] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const groupedFields = {
+    "Project Description": [
+      "Primary_Critical_Material", "Project_Name", "Mining_Method", "Co-Producing_Materials",
+      "Existing_Mine", "Status_of_Project", "Regulatory_Challenges"
+    ],
+    "Location": [
+      "State", "County", "Latitude", "Longitude", "Nearest_Population_Center",
+      "Population_Size", "Additional_Location_Information", "Mining_District", "Mineral_Occurrence"
+    ],
+    "Developer Description": [
+      "Lead_Developer", "Location_of_Lead_Developer_HQ", "Lead_Developer_Website",
+      "Parent_Company", "Location_of_Parent_Company_HQ", "Was_There_Change_in_Ownership_during_Project?"
+    ],
+    "Development Plans": [
+      "Planned_Production_Capacity_(Thousands_of_Tons/Year)", "Planned_Lifespan_of_Mine__(Years)",
+      "Processing_Plan_in_US", "Processing_Done_by_the_Same_Lead_Developer/Parent_Company",
+      "Total_Capital_Costs__(Millions_of_Dollars)"
+    ],
+    "Financial Support": [
+      "Number_of_Federal_Awards", "Federal_Agency", "Year_Granted", "Grant/Loan",
+      "Amount__(Millions_of_Dollars)", "Purpose_of_Support",
+      "Public_Supply_Agreement_w/_an_Automaker_or_Battery/Component_Producer"
+    ],
+    "Land Ownership": [
+      "Type_of_Land", "Public_Land_Ownership", "Year_of_Land_Acquisition"
+    ],
+    "Litigation": [
+      "Evidence_of_Litigation", "Number_of_Cases", "State_and/or_Federal",
+      "Court_Rulings_Issued", "Level_of_Court", "Link_to_Judicial_Decision"
+    ]
+  };
+
+  const [expandedSections, setExpandedSections] = useState(() =>
+    Object.keys(groupedFields).reduce((acc, section) => {
+      acc[section] = false;
+      return acc;
+    }, {})
+  );
+
+  const getReadableLabel = (fieldKey) => {
+    return fieldKey.replace(/_/g, ' ').trim();
+  };
+
   useEffect(() => {
-    // Load primary mineral data
-    Papa.parse('/minerals_with_coords.csv', {
+    Papa.parse('/cleaned_DevCamp_new.csv', {
       header: true,
       download: true,
       complete: (results) => {
         const all = results.data.filter(row => row.Latitude && row.Longitude);
-        if (id >= 0 && id < all.length) {
-          setMineral(all[id]);
-        }
+        const decodedId = decodeURIComponent(id).trim().toLowerCase();
+        const match = all.find(row =>
+          row.Project_Name?.trim().toLowerCase() === decodedId
+        );
+        if (match) setMineral(match);
       }
     });
 
-    // Load notes data
-    Papa.parse('/minerals_backup_data.csv', {
-      header: false,
-      skipEmptyLines: true,
+    Papa.parse('/Notes_updated.csv', {
+      header: true,
       download: true,
+      skipEmptyLines: true,
       complete: (results) => {
         const rows = results.data;
-        const header = rows[0];
-        const mineIndex = header.findIndex(col => col.trim().toLowerCase() === 'mine/prospect');
-        const noteIndex = header.findIndex(col => col.trim().toLowerCase() === 'notes');
-
         const mapping = {};
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          const mine = row[mineIndex]?.trim();
-          const note = row[noteIndex]?.trim();
-          if (mine && note) {
-            mapping[mine] = note;
+
+        rows.forEach(row => {
+          const mine = row["Mine/Prospect"]?.trim();
+          if (mine) {
+            const noteHtml = Object.entries(row)
+              .filter(([key, val]) =>
+                key !== "Mine/Prospect" &&
+                key &&
+                val &&
+                val.trim() !== '' &&
+                val.trim() !== '\n'
+              )
+              .map(([key, val]) => {
+                const cleanVal = val
+                  .replace(/[“”]/g, '"')
+                  .replace(/[–—]/g, '-')
+                  .replace(/[�]/g, '')
+                  .trim();
+                return `<strong>${key}</strong>: ${cleanVal}`;
+              })
+              .join("<br/>");
+
+            mapping[mine] = noteHtml;
           }
-        }
+        });
+
         setNoteMap(mapping);
       }
     });
@@ -54,60 +112,63 @@ function MineralDetailPage() {
   const matchingKey = mineral.Project_Name?.trim();
   const note = noteMap[matchingKey];
 
+  const handleSearchChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    const newExpanded = {};
+    Object.entries(groupedFields).forEach(([section, keys]) => {
+      const matches = keys.some((key) =>
+        key.toLowerCase().includes(value) ||
+        String(mineral[key] || '').toLowerCase().includes(value)
+      );
+      newExpanded[section] = value ? matches : false;
+    });
+
+    setExpandedSections(newExpanded);
+  };
+
   const scrollToNotes = () => {
     if (notesRef.current) {
       notesRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Handle search input change
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
-  // Filter fields based on the search term
-  const filteredFields = Object.entries(mineral).filter(([key, value]) =>
-    key.toLowerCase().includes(searchTerm) || String(value).toLowerCase().includes(searchTerm)
-  );
-
-  
-  // Helper function to structure notes dynamically
-  // Helper function to structure notes dynamically
   const formatNotes = (rawNote) => {
     if (!rawNote) return 'No notes available.';
 
-    const sectionHeaders = [
-      "Location", "Project Description", "Developer Description", "Economic Impact",
-      "Financial Support", "Support Statements", "Concerns", "Reasons for", 
-      "Commercial Plans", "Land Ownership", "Community Impact", "Environmental Impact"
-    ];
+    const parts = rawNote
+      .split('<br/>')
+      .filter(part => {
+        const content = part.replace(/<[^>]+>/g, '').trim();
+        return content && !content.endsWith(': N/A');
+      });
 
-    // Regular expression to find phrases like "Lead Developer:", "Parent Company:", etc.
-    const headingRegex = /(\b[A-Z][\w\s/]*:)/g;
+    if (parts.length === 0) return 'No additional notes available.';
 
-    const regex = new RegExp(`(${sectionHeaders.join('|')}):`, 'g');
-    const sections = rawNote.split(regex).filter(Boolean);
+    return (
+      <div className="notes-list">
+        {parts.map((line, idx) => {
+          const match = line.match(/<strong>(.*?)<\/strong>:\s*(.*)/);
+          if (!match) return null;
 
-    const structuredNotes = [];
-    for (let i = 0; i < sections.length; i += 2) {
-      const title = sections[i]?.trim() || 'Unknown';
-      let content = sections[i + 1]?.trim() || 'No data available.';
-
-      // Ensure content is a string before applying replace
-      if (typeof content === 'string') {
-        // Make headings at the beginning of each line bold
-        content = content.replace(headingRegex, '<strong>$1</strong>');
-      }
-
-      structuredNotes.push(
-        <div key={i} className="note-section">
-          <h3>{title}:</h3>
-          <p dangerouslySetInnerHTML={{ __html: content }} />
-        </div>
-      );
-    }
-
-    return structuredNotes;
+          const [, label, value] = match;
+          return (
+            <div className="note-section" key={idx}>
+              <h3>{label}:</h3>
+              <p>{value}</p>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -128,28 +189,66 @@ function MineralDetailPage() {
         </div>
       </div>
 
-      <div className="grid">
-        {filteredFields.map(([key, value]) => {
-          // Check if the value is a valid URL
-          const isUrl = typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'));
+      <div className="section-container">
+        {Object.entries(groupedFields).map(([section, keys]) => {
+          const visibleFields = keys.filter((key) => {
+            const val = mineral[key];
+            return val !== undefined && (
+              key.toLowerCase().includes(searchTerm) ||
+              String(val).toLowerCase().includes(searchTerm)
+            );
+          });
 
           return (
-            <div className="field" key={key}>
-              <strong>{key.replaceAll('_', ' ')}:</strong>
-              {isUrl ? (
-                <a href={value} target="_blank" rel="noopener noreferrer" className="link-box">
-                  {value}
-                </a>
-              ) : (
-                ` ${value || 'N/A'}`
+            <div key={section} className="section-group">
+              <div className="section-header" onClick={() => toggleSection(section)}>
+                {section}
+                <span className="arrow">{expandedSections[section] ? '▲' : '▼'}</span>
+              </div>
+
+              {expandedSections[section] && (
+                <div className="grid">
+                  {visibleFields.length > 0 ? (
+                    visibleFields.map((key) => {
+                      const value = mineral[key];
+                      const isUrl = typeof value === 'string' &&
+                        (value.startsWith('http://') || value.startsWith('https://'));
+
+                      const readableKey = getReadableLabel(key);
+                      const hasNote = note?.includes(`<strong>${readableKey}</strong>`);
+
+                      return (
+                        <div className="field-wrapper" key={key}>
+                          {hasNote && <div className="field-asterisk" data-tooltip="See more in Additional Notes">*</div>
+                          }
+                          <div className="field">
+                            {isUrl ? (
+                              <>
+                                <span className="field-label">{key}: </span>
+                                <a href={value} target="_blank" rel="noopener noreferrer" className="link-box">
+                                  {value}
+                                </a>
+                              </>
+                            ) : (
+                              <span className="field-inline">
+                                <span className="field-label">{key}: </span>
+                                <span className="field-value">{value || 'N/A'}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="field">No data available in this section.</div>
+                  )}
+                </div>
               )}
             </div>
           );
         })}
       </div>
 
-
-      {/* Notes Section */}
       <div className="notes-section" ref={notesRef}>
         <h2>Additional Notes</h2>
         {note ? formatNotes(note) : <p>No additional notes found.</p>}

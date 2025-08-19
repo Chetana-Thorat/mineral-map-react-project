@@ -5,6 +5,9 @@ import MapPage from './pages/MapPage';
 import MineralDetailPage from './pages/MineralDetailPage';
 import Navbar from './components/Navbar';
 import './App.css';
+import ProjectsPage from './pages/ProjectsPage';
+import UserGuidePage from './pages/UserGuidePage';
+import PublicationsPage from './pages/PublicationsPage';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/mineral/:id" element={<MineralDetailPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/user-guide" element={<UserGuidePage />} />
+          <Route path="/publications" element={<PublicationsPage />} />
         </Routes>
       </div>
     </Router>
