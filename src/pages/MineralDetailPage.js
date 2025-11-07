@@ -3,6 +3,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import './MineralDetailPage.css';
 
+// Used ONLY for fallback matching when exact key doesn't exist.
+// Keeps existing behavior intact for all working projects.
+const norm = (s = '') =>
+  s
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[“”]/g, '"')
+    .replace(/[’']/g, "'")
+    .replace(/'/g, '')        // NEW: "king's" -> "kings"
+    .replace(/[–—]/g, '-')     // en/em dash -> hyphen
+    .replace(/&/g, ' and ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 function MineralDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,7 +83,7 @@ function MineralDetailPage() {
       }
     });
 
-    Papa.parse('/Notes_updated.csv', {
+    Papa.parse('/Notes_recent.csv', {
       header: true,
       download: true,
       skipEmptyLines: true,
@@ -109,8 +123,52 @@ function MineralDetailPage() {
 
   if (!mineral) return <div className="loading">Loading...</div>;
 
+  // ---- exact match first (unchanged behavior), then a gentle fallback ----
   const matchingKey = mineral.Project_Name?.trim();
-  const note = noteMap[matchingKey];
+  let note = noteMap[matchingKey];
+
+  if (!note && matchingKey) {
+    const want = norm(matchingKey);
+    const entries = Object.entries(noteMap);
+
+    // (a) exact normalized equality
+    let hit = entries.find(([k]) => norm(k) === want);
+
+    // (b) substring either way (handles dash/space/& variations)
+    if (!hit) {
+      hit = entries.find(([k]) => {
+        const nk = norm(k);
+        return nk.includes(want) || want.includes(nk);
+      });
+    }
+
+    // (c) token-based similarity (order independent)
+    if (!hit) {
+      const toTokens = s => Array.from(new Set(norm(s).split(' ').filter(Boolean)));
+      const jaccard = (A, B) => {
+        const setA = new Set(A), setB = new Set(B);
+        const inter = [...setA].filter(x => setB.has(x)).length;
+        const uni = new Set([...setA, ...setB]).size;
+        return uni ? inter / uni : 0;
+      };
+
+      const wantTokens = toTokens(matchingKey);
+
+      const best = entries
+        .map(([k, v]) => {
+          const kt = toTokens(k);
+          const score = jaccard(wantTokens, kt);
+          const inclBoost = norm(k).includes(want) || want.includes(norm(k)) ? 0.05 : 0;
+          return { k, v, score: score + inclBoost, lenDiff: Math.abs(norm(k).length - want.length) };
+        })
+        .sort((a, b) => (b.score - a.score) || (a.lenDiff - b.lenDiff))[0];
+
+      if (best && best.score >= 0.6) hit = [best.k, best.v];
+    }
+
+    if (hit) note = hit[1];
+  }
+  // -----------------------------------------------------------------------
 
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
@@ -219,8 +277,7 @@ function MineralDetailPage() {
 
                       return (
                         <div className="field-wrapper" key={key}>
-                          {hasNote && <div className="field-asterisk" data-tooltip="See more in Additional Notes">*</div>
-                          }
+                          {hasNote && <div className="field-asterisk" data-tooltip="See more in Additional Notes">*</div>}
                           <div className="field">
                             {isUrl ? (
                               <>
