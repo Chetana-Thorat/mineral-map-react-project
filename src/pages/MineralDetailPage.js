@@ -11,8 +11,8 @@ const norm = (s = '') =>
     .normalize('NFKD')
     .replace(/[“”]/g, '"')
     .replace(/[’']/g, "'")
-    .replace(/'/g, '')        // NEW: "king's" -> "kings"
-    .replace(/[–—]/g, '-')     // en/em dash -> hyphen
+    .replace(/'/g, '')
+    .replace(/[–—]/g, '-')
     .replace(/&/g, ' and ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -28,33 +28,67 @@ function MineralDetailPage() {
 
   const groupedFields = {
     "Project Description": [
-      "Primary_Critical_Material", "Project_Name", "Mining_Method", "Co-Producing_Materials",
-      "Existing_Mine", "Status_of_Project", "Regulatory_Challenges"
+      "Primary_Critical_Material",
+      "Project_Name",
+      "Mining_Method",
+      "Co-Producing_Materials",
+      "Existing_Mine",
+      "Status_of_Project",
+      "Regulatory_Challenges"
     ],
+
     "Location": [
-      "State", "County", "Latitude", "Longitude", "Nearest_Population_Center",
-      "Population_Size", "Additional_Location_Information", "Mining_District", "Mineral_Occurrence"
+      "State",
+      "County",
+      "Latitude",
+      "Longitude",
+      "Nearest_Population_Center",
+      "Population_Size",
+      "Additional_Location_Information",
+      "Mining_District",
+      "Mineral_Occurrence"
     ],
+
     "Developer Description": [
-      "Lead_Developer", "Location_of_Lead_Developer_HQ", "Lead_Developer_Website",
-      "Parent_Company", "Location_of_Parent_Company_HQ", "Was_There_Change_in_Ownership_during_Project?"
+      "Lead_Developer",
+      "Location_of_Lead_Developer_HQ",
+      "Lead_Developer_Website",
+      "Parent_Company",
+      "Location_of_Parent_Company_HQ",
+      "Was_There_Change_in_Ownership_during_Project?"
     ],
+
     "Development Plans": [
-      "Planned_Production_Capacity_(Thousands_of_Tons/Year)", "Planned_Lifespan_of_Mine__(Years)",
-      "Processing_Plan_in_US", "Processing_Done_by_the_Same_Lead_Developer/Parent_Company",
+      "Planned_Production_Capacity_(Thousands_of_Tons/Year)",
+      "Planned_Lifespan_of_Mine__(Years)",
+      "Processing_Plan_in_US",
+      "Processing_Done_by_the_Same_Lead_Developer/Parent_Company",
       "Total_Capital_Costs__(Millions_of_Dollars)"
     ],
+
     "Financial Support": [
-      "Number_of_Federal_Awards", "Federal_Agency", "Year_Granted", "Grant/Loan",
-      "Amount__(Millions_of_Dollars)", "Purpose_of_Support",
+      "Number_of_Federal_Awards",
+      "Federal_Agency",
+      "Year_Granted",
+      "Grant/Loan",
+      "Amount__(Millions_of_Dollars)",
+      "Purpose_of_Support",
       "Public_Supply_Agreement_w/_an_Automaker_or_Battery/Component_Producer"
     ],
+
     "Land Ownership": [
-      "Type_of_Land", "Public_Land_Ownership", "Year_of_Land_Acquisition"
+      "Type_of_Land",
+      "Public_Land_Ownership",
+      "Year_of_Land_Acquisition"
     ],
+
     "Litigation": [
-      "Evidence_of_Litigation", "Number_of_Cases", "State_and/or_Federal",
-      "Court_Rulings_Issued", "Level_of_Court", "Link_to_Judicial_Decision"
+      "Evidence_of_Litigation",
+      "Number_of_Cases",
+      "State_and/or_Federal",
+      "Court_Rulings_Issued",
+      "Level_of_Court",
+      "Link_to_Judicial_Decision"
     ]
   };
 
@@ -65,8 +99,12 @@ function MineralDetailPage() {
     }, {})
   );
 
+  // Converts database column names into readable labels for users.
   const getReadableLabel = (fieldKey) => {
-    return fieldKey.replace(/_/g, ' ').trim();
+    return fieldKey
+      .replace(/_/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
   };
 
   useEffect(() => {
@@ -74,12 +112,22 @@ function MineralDetailPage() {
       header: true,
       download: true,
       complete: (results) => {
-        const all = results.data.filter(row => row.Latitude && row.Longitude);
-        const decodedId = decodeURIComponent(id).trim().toLowerCase();
-        const match = all.find(row =>
-          row.Project_Name?.trim().toLowerCase() === decodedId
+        const all = results.data.filter(
+          row => row.Latitude && row.Longitude
         );
-        if (match) setMineral(match);
+
+        const decodedId = decodeURIComponent(id)
+          .trim()
+          .toLowerCase();
+
+        const match = all.find(
+          row =>
+            row.Project_Name?.trim().toLowerCase() === decodedId
+        );
+
+        if (match) {
+          setMineral(match);
+        }
       }
     });
 
@@ -93,6 +141,7 @@ function MineralDetailPage() {
 
         rows.forEach(row => {
           const mine = row["Mine/Prospect"]?.trim();
+
           if (mine) {
             const noteHtml = Object.entries(row)
               .filter(([key, val]) =>
@@ -108,6 +157,7 @@ function MineralDetailPage() {
                   .replace(/[–—]/g, '-')
                   .replace(/[�]/g, '')
                   .trim();
+
                 return `<strong>${key}</strong>: ${cleanVal}`;
               })
               .join("<br/>");
@@ -121,9 +171,10 @@ function MineralDetailPage() {
     });
   }, [id]);
 
-  if (!mineral) return <div className="loading">Loading...</div>;
+  if (!mineral) {
+    return <div className="loading">Loading...</div>;
+  }
 
-  // ---- exact match first (unchanged behavior), then a gentle fallback ----
   const matchingKey = mineral.Project_Name?.trim();
   let note = noteMap[matchingKey];
 
@@ -131,24 +182,44 @@ function MineralDetailPage() {
     const want = norm(matchingKey);
     const entries = Object.entries(noteMap);
 
-    // (a) exact normalized equality
-    let hit = entries.find(([k]) => norm(k) === want);
+    let hit = entries.find(
+      ([k]) => norm(k) === want
+    );
 
-    // (b) substring either way (handles dash/space/& variations)
     if (!hit) {
       hit = entries.find(([k]) => {
         const nk = norm(k);
-        return nk.includes(want) || want.includes(nk);
+
+        return (
+          nk.includes(want) ||
+          want.includes(nk)
+        );
       });
     }
 
-    // (c) token-based similarity (order independent)
     if (!hit) {
-      const toTokens = s => Array.from(new Set(norm(s).split(' ').filter(Boolean)));
+      const toTokens = s =>
+        Array.from(
+          new Set(
+            norm(s)
+              .split(' ')
+              .filter(Boolean)
+          )
+        );
+
       const jaccard = (A, B) => {
-        const setA = new Set(A), setB = new Set(B);
-        const inter = [...setA].filter(x => setB.has(x)).length;
-        const uni = new Set([...setA, ...setB]).size;
+        const setA = new Set(A);
+        const setB = new Set(B);
+
+        const inter = [...setA]
+          .filter(x => setB.has(x))
+          .length;
+
+        const uni = new Set([
+          ...setA,
+          ...setB
+        ]).size;
+
         return uni ? inter / uni : 0;
       };
 
@@ -157,38 +228,76 @@ function MineralDetailPage() {
       const best = entries
         .map(([k, v]) => {
           const kt = toTokens(k);
-          const score = jaccard(wantTokens, kt);
-          const inclBoost = norm(k).includes(want) || want.includes(norm(k)) ? 0.05 : 0;
-          return { k, v, score: score + inclBoost, lenDiff: Math.abs(norm(k).length - want.length) };
-        })
-        .sort((a, b) => (b.score - a.score) || (a.lenDiff - b.lenDiff))[0];
 
-      if (best && best.score >= 0.6) hit = [best.k, best.v];
+          const score = jaccard(
+            wantTokens,
+            kt
+          );
+
+          const inclBoost =
+            norm(k).includes(want) ||
+            want.includes(norm(k))
+              ? 0.05
+              : 0;
+
+          return {
+            k,
+            v,
+            score: score + inclBoost,
+            lenDiff: Math.abs(
+              norm(k).length - want.length
+            )
+          };
+        })
+        .sort(
+          (a, b) =>
+            (b.score - a.score) ||
+            (a.lenDiff - b.lenDiff)
+        )[0];
+
+      if (best && best.score >= 0.6) {
+        hit = [
+          best.k,
+          best.v
+        ];
+      }
     }
 
-    if (hit) note = hit[1];
+    if (hit) {
+      note = hit[1];
+    }
   }
-  // -----------------------------------------------------------------------
 
   const handleSearchChange = (e) => {
     const value = e.target.value.toLowerCase();
+
     setSearchTerm(value);
 
     const newExpanded = {};
-    Object.entries(groupedFields).forEach(([section, keys]) => {
-      const matches = keys.some((key) =>
-        key.toLowerCase().includes(value) ||
-        String(mineral[key] || '').toLowerCase().includes(value)
-      );
-      newExpanded[section] = value ? matches : false;
-    });
+
+    Object.entries(groupedFields).forEach(
+      ([section, keys]) => {
+        const matches = keys.some(
+          (key) =>
+            key.toLowerCase().includes(value) ||
+            String(mineral[key] || '')
+              .toLowerCase()
+              .includes(value)
+        );
+
+        newExpanded[section] =
+          value ? matches : false;
+      }
+    );
 
     setExpandedSections(newExpanded);
   };
 
   const scrollToNotes = () => {
     if (notesRef.current) {
-      notesRef.current.scrollIntoView({ behavior: 'smooth' });
+      notesRef.current.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -200,26 +309,45 @@ function MineralDetailPage() {
   };
 
   const formatNotes = (rawNote) => {
-    if (!rawNote) return 'No notes available.';
+    if (!rawNote) {
+      return 'No project notes available.';
+    }
 
     const parts = rawNote
       .split('<br/>')
       .filter(part => {
-        const content = part.replace(/<[^>]+>/g, '').trim();
-        return content && !content.endsWith(': N/A');
+        const content = part
+          .replace(/<[^>]+>/g, '')
+          .trim();
+
+        return (
+          content &&
+          !content.endsWith(': N/A')
+        );
       });
 
-    if (parts.length === 0) return 'No additional notes available.';
+    if (parts.length === 0) {
+      return 'No project notes available.';
+    }
 
     return (
       <div className="notes-list">
         {parts.map((line, idx) => {
-          const match = line.match(/<strong>(.*?)<\/strong>:\s*(.*)/);
-          if (!match) return null;
+          const match = line.match(
+            /<strong>(.*?)<\/strong>:\s*(.*)/
+          );
+
+          if (!match) {
+            return null;
+          }
 
           const [, label, value] = match;
+
           return (
-            <div className="note-section" key={idx}>
+            <div
+              className="note-section"
+              key={idx}
+            >
               <h3>{label}:</h3>
               <p>{value}</p>
             </div>
@@ -231,11 +359,23 @@ function MineralDetailPage() {
 
   return (
     <div className="mineral-detail">
-      <button className="back-btn" onClick={() => navigate('/map')}>← Back to Map</button>
+
+      {/* Returns to the page the user came from. */}
+      <div className="back-navigation">
+        <button
+          className="back-btn"
+          onClick={() => navigate(-1)}
+        >
+          ← Back
+        </button>
+      </div>
 
       <div className="header-row">
+
         <h1>{mineral.Project_Name}</h1>
+
         <div className="search-container">
+
           <input
             type="text"
             placeholder="🔍 Search fields..."
@@ -243,73 +383,167 @@ function MineralDetailPage() {
             onChange={handleSearchChange}
             className="search-bar improved-search"
           />
-          <button className="scroll-btn" onClick={scrollToNotes}>Additional Info ⬇</button>
+
+          <button
+            className="scroll-btn"
+            onClick={scrollToNotes}
+          >
+            Project Notes ⬇
+          </button>
+
         </div>
       </div>
 
       <div className="section-container">
-        {Object.entries(groupedFields).map(([section, keys]) => {
-          const visibleFields = keys.filter((key) => {
-            const val = mineral[key];
-            return val !== undefined && (
-              key.toLowerCase().includes(searchTerm) ||
-              String(val).toLowerCase().includes(searchTerm)
+
+        {Object.entries(groupedFields).map(
+          ([section, keys]) => {
+
+            const visibleFields = keys.filter(
+              (key) => {
+                const val = mineral[key];
+
+                return (
+                  val !== undefined &&
+                  (
+                    key
+                      .toLowerCase()
+                      .includes(searchTerm) ||
+                    String(val)
+                      .toLowerCase()
+                      .includes(searchTerm)
+                  )
+                );
+              }
             );
-          });
 
-          return (
-            <div key={section} className="section-group">
-              <div className="section-header" onClick={() => toggleSection(section)}>
-                {section}
-                <span className="arrow">{expandedSections[section] ? '▲' : '▼'}</span>
-              </div>
+            return (
+              <div
+                key={section}
+                className="section-group"
+              >
 
-              {expandedSections[section] && (
-                <div className="grid">
-                  {visibleFields.length > 0 ? (
-                    visibleFields.map((key) => {
-                      const value = mineral[key];
-                      const isUrl = typeof value === 'string' &&
-                        (value.startsWith('http://') || value.startsWith('https://'));
+                <div
+                  className="section-header"
+                  onClick={() =>
+                    toggleSection(section)
+                  }
+                >
+                  {section}
 
-                      const readableKey = getReadableLabel(key);
-                      const hasNote = note?.includes(`<strong>${readableKey}</strong>`);
-
-                      return (
-                        <div className="field-wrapper" key={key}>
-                          {hasNote && <div className="field-asterisk" data-tooltip="See more in Additional Notes">*</div>}
-                          <div className="field">
-                            {isUrl ? (
-                              <>
-                                <span className="field-label">{key}: </span>
-                                <a href={value} target="_blank" rel="noopener noreferrer" className="link-box">
-                                  {value}
-                                </a>
-                              </>
-                            ) : (
-                              <span className="field-inline">
-                                <span className="field-label">{key}: </span>
-                                <span className="field-value">{value || 'N/A'}</span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="field">No data available in this section.</div>
-                  )}
+                  <span className="arrow">
+                    {expandedSections[section]
+                      ? '▲'
+                      : '▼'}
+                  </span>
                 </div>
-              )}
-            </div>
-          );
-        })}
+
+                {expandedSections[section] && (
+                  <div className="grid">
+
+                    {visibleFields.length > 0 ? (
+
+                      visibleFields.map((key) => {
+                        const value = mineral[key];
+
+                        const isUrl =
+                          typeof value === 'string' &&
+                          (
+                            value.startsWith('http://') ||
+                            value.startsWith('https://')
+                          );
+
+                        const readableKey =
+                          getReadableLabel(key);
+
+                        const hasNote =
+                          note?.includes(
+                            `<strong>${readableKey}</strong>`
+                          );
+
+                        return (
+                          <div
+                            className="field-wrapper"
+                            key={key}
+                          >
+
+                            {hasNote && (
+                              <div
+                                className="field-asterisk"
+                                data-tooltip="See more in Project Notes"
+                              >
+                                *
+                              </div>
+                            )}
+
+                            <div className="field">
+
+                              {isUrl ? (
+                                <>
+                                  <span className="field-label">
+                                    {readableKey}:{' '}
+                                  </span>
+
+                                  <a
+                                    href={value}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="link-box"
+                                  >
+                                    {value}
+                                  </a>
+                                </>
+                              ) : (
+                                <span className="field-inline">
+
+                                  <span className="field-label">
+                                    {readableKey}:{' '}
+                                  </span>
+
+                                  <span className="field-value">
+                                    {value || 'N/A'}
+                                  </span>
+
+                                </span>
+                              )}
+
+                            </div>
+                          </div>
+                        );
+                      })
+
+                    ) : (
+
+                      <div className="field">
+                        No data available in this section.
+                      </div>
+
+                    )}
+
+                  </div>
+                )}
+
+              </div>
+            );
+          }
+        )}
+
       </div>
 
-      <div className="notes-section" ref={notesRef}>
-        <h2>Additional Notes</h2>
-        {note ? formatNotes(note) : <p>No additional notes found.</p>}
+      <div
+        className="notes-section"
+        ref={notesRef}
+      >
+
+        <h2>Project Notes</h2>
+
+        {note
+          ? formatNotes(note)
+          : <p>No project notes found.</p>
+        }
+
       </div>
+
     </div>
   );
 }

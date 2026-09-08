@@ -1,11 +1,12 @@
 /* Base Layout */
 .mineral-detail {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #990000; /* IU Crimson */
+  background-color: #990000;
   color: white;
   min-height: 100vh;
   padding: 2rem 3rem;
 }
+
 
 /* Back Button */
 .back-btn {
@@ -24,6 +25,14 @@
   background-color: #e6b800;
   transform: translateY(-2px);
 }
+
+
+/* Back Navigation */
+.back-navigation {
+  display: flex;
+  align-items: center;
+}
+
 
 /* Header Row */
 .header-row {
@@ -66,16 +75,18 @@
   background-color: #e6b800;
 }
 
+
 /* Section Grouping */
 .section-container {
   margin-bottom: 2rem;
 }
 
 .section-group {
-  margin-bottom: 0.5rem; /* ✅ reduced spacing between sections */
+  margin-bottom: 0.5rem;
   border-radius: 10px;
   overflow: hidden;
 }
+
 
 /* Collapsible Section Headers */
 .section-header {
@@ -100,6 +111,7 @@
   margin-left: 1rem;
 }
 
+
 /* Grid of Fields */
 .grid {
   display: grid;
@@ -112,26 +124,35 @@
   margin-bottom: 1rem;
 }
 
+
+/* Individual Field Card */
 .field {
   background: #f9f9f9;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  word-wrap: break-word;          /* ✅ allow long words to break */
-  word-break: break-word;         /* ✅ allow hyphenated wrap */
-  overflow-wrap: break-word;
-  max-width: 100%;                /* ✅ prevent overflow */
+
+  /* Prevent ugly mid-word splitting. */
+  overflow-wrap: normal;
+  word-break: normal;
+
+  max-width: 100%;
   min-height: 70px;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
+
+/* Field Wrapper */
 .field-wrapper {
   position: relative;
 }
 
+
+/* Notes Asterisk */
 .field-asterisk {
   position: absolute;
   top: 6px;
@@ -143,7 +164,8 @@
   cursor: help;
 }
 
-/* Custom Tooltip Styling */
+
+/* Custom Tooltip */
 .field-asterisk:hover::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -160,35 +182,48 @@
 }
 
 
-
+/* Field Hover */
 .field:hover {
   transform: translateY(-3px);
 }
 
+
+/* Readable Field Label */
 .field-label {
   font-weight: 700;
   color: #990000;
   margin-bottom: 0.3rem;
   line-height: 1.3;
-  word-break: break-word;
+
+  /* Keep whole words together whenever possible. */
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 
+/* Field Value */
 .field-value {
   color: #333;
   line-height: 1.5;
-  word-break: break-word;
+
+  /* Avoid breaking normal words in half. */
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
+
+/* Links */
 .link-box {
   color: #0055a2;
   text-decoration: underline;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .link-box:hover {
   color: #003366;
 }
+
 
 /* Notes Section */
 .notes-section {
@@ -199,10 +234,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   color: #333;
 }
+
+
 .notes-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* spacing between each note-section */
+  gap: 1rem;
 }
 
 
@@ -212,6 +249,7 @@
   margin-bottom: 1rem;
 }
 
+
 .note-section {
   padding: 1rem;
   background: #f4f4f4;
@@ -220,16 +258,19 @@
   border-radius: 6px;
 }
 
+
 .note-section h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
   color: #990000;
 }
 
+
 .note-section p {
   color: #333;
   line-height: 1.6;
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -251,8 +292,14 @@
   .scroll-btn {
     width: fit-content;
   }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
+
+/* Existing Asterisk Class */
 .asterisk {
   color: red;
   margin-left: 2px;
